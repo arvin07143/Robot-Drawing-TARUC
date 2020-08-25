@@ -2,3 +2,18 @@ x64\*
 
 
 
+*.db
+*.db
+*.db-shm
+*.tlog
+*.obj
+*.log
+*.pdb
+*.idb
+*.opendb
+*.exe
+*.db
+*.db-wal
+*.db
+*.ilk
+*.txt
