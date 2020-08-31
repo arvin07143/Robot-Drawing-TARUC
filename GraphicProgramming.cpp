@@ -30,14 +30,10 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	case WM_KEYDOWN:
 		switch (wParam) {
 		case VK_UP:
-			if (fingerAngle > -90) {
-				fingerAngle -= 1;
-			}
+				fingerAngle -= 3;
 			break;
 		case VK_LEFT:
-			if (widenFing < 10) {
-				widenFing += 1;
-			}
+			fingerAngle += 3;
 			break;
 		case VK_RIGHT:
 			if (kneeAngle > -10)kneeAngle -= 5;
@@ -272,29 +268,47 @@ void finger(float length) {
 	//fingerbase
 	//drawCylinder(3, 3, 20, 255, 255, 255, GLU_LINE);
 
+	GLuint joint = loadTexture("join.bmp");
+
+	GLuint metal = loadTexture("metal.bmp");
+
 	glPushMatrix();
 	glTranslatef(18.5, 0, 0);
 	glRotatef(90, 0, 1, 0);
-	drawCylinder(1.8, 1.8, length, 255, 255, 255, GLU_LINE);
+	drawCylinder(1.8, 1.8, length, 255, 255, 255, GLU_FILL,metal);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(18, 0, 0);
-	glRotatef(90, 0, 1, 0);
-	drawSphere(1.8, 255, 255, 255, GLU_LINE);
+	glRotatef(90, 1, 0, 0);
+	drawSphere(1.8, 255, 255, 255, GLU_FILL,joint);
 	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(18, 0, 0);
+	glRotatef(fingerAngle, 0, 1, 0);
+	glTranslatef(-18, 0, 0);
 
 	glPushMatrix();
 	glTranslatef(10, 0, 0);
 	glRotatef(90, 0, 1, 0);
-	drawCylinder(1.8, 1.8, 8, 255, 255, 255, GLU_LINE);
+	drawCylinder(1.8, 1.8, 8, 255, 255, 255, GLU_FILL,metal);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(9.5, 0, 0);
-	glRotatef(90, 0, 1, 0);
-	drawSphere(1.8,255, 255, 255, GLU_LINE);
+	glRotatef(90, 1, 0, 0);
+	drawSphere(1.8,255, 255, 255, GLU_FILL,joint);
 	glPopMatrix();
+
+	glDeleteTextures(1, &joint);
+
+	glPushMatrix();
+	glTranslatef(10, 0, 0);
+	glRotatef(fingerAngle, 0, 1, 0);
+	glTranslatef(-10, 0, 0);
+
+	GLuint fingertip = loadTexture("metal.bmp");
 
 	//fingertip
 	glPushMatrix();
@@ -349,68 +363,115 @@ void finger(float length) {
 	glScalef(4, 2, 2);
 	drawCube();
 	glPopMatrix();
+
+	glPopMatrix();
+	glPopMatrix();
+
+	glDeleteTextures(1, &metal);
+	glDeleteTextures(1, &fingertip);
+
 }
 
 void drawPalm() {
+
+	GLuint palm = loadTexture("dotted.bmp");
 	glBegin(GL_POLYGON); //z = -1
+	glTexCoord2f(0.2, 0);
 	glVertex3f(0,0,-1);
+	glTexCoord2f(0.8, 0);
 	glVertex3f(1,0,-1);
+	glTexCoord2f(1, 0.5);
 	glVertex3f(1.2,1,-1);
+	glTexCoord2f(0.8, 1);
 	glVertex3f(1,2,-1);
+	glTexCoord2f(0.2, 1);
 	glVertex3f(0,2,-1);
+	glTexCoord2f(0, 0.5);
 	glVertex3f(-0.2,1,-1);
 	glEnd();
 
 	glBegin(GL_POLYGON); //z = 1
+	glTexCoord2f(0.2, 0);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(0.8, 0);
 	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 0.5);
 	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(0.8, 1);
 	glVertex3f(1, 2, 1);
+	glTexCoord2f(0.2, 1);
 	glVertex3f(0, 2, 1);
+	glTexCoord2f(0, 0.5);
 	glVertex3f(-0.2, 1, 1);
 	glEnd();
 
 	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
 	glVertex3f(0, 2, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(0, 2, 1);
+	glTexCoord2f(1, 0);
 	glVertex3f(-0.2, 1, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(-0.2, 1, -1);
 	glEnd();
 
 	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
 	glVertex3f(1, 2, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(1, 2, 1);
+	glTexCoord2f(1, 0);
 	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(1.2, 1, -1);
 	glEnd();
 
 	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
 	glVertex3f(0, 0, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(1, 0);
 	glVertex3f(-0.2, 1, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(-0.2, 1, -1);
 	glEnd();
 
 	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
 	glVertex3f(1, 1, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(1, 1, 1);
+	glTexCoord2f(1, 0);
 	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(1.2, 1, -1);
 	glEnd();
 
 	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
 	glVertex3f(0, 2, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(1, 2, -1);
+	glTexCoord2f(1, 0);
 	glVertex3f(1, 2, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(0, 2, 1);
 	glEnd();
 
 	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
 	glVertex3f(0, 0, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(1, 0, -1);
+	glTexCoord2f(1, 0);
 	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(0, 0, 1);
 	glEnd();
+
+	glDeleteTextures(1, &palm);
 }
 
 void drawHand() {
@@ -747,17 +808,18 @@ void drawLeg() {
 
 void drawArm() {
 	glPushMatrix();
-	glTranslatef(0, 30, 0);
+	glTranslatef(0, 27, 0);
 	glPushMatrix();
 	glScalef(0.5, 0.5, 1);
 	drawHand();
 	glPopMatrix();
 
+	GLuint wrist = loadTexture("circular.bmp");
+
 	glPushMatrix();
 	glTranslatef(3.5, -12.1, 0);
 	glScalef(2, 1, 1);
 	glBegin(GL_QUADS); //front ( z = -1)
-	glColor3f(1, 1, 0);
 	glTexCoord2f(0, 0);
 	glVertex3f(-2, -1, -3);
 	glTexCoord2f(0, 1);
@@ -769,7 +831,6 @@ void drawArm() {
 	glEnd();
 
 	glBegin(GL_QUADS); //back ( z = 1)
-	glColor3f(1, 0, 0);
 	glTexCoord2f(0, 0);
 	glVertex3f(-2, -1, 3);
 	glTexCoord2f(0, 1);
@@ -781,7 +842,6 @@ void drawArm() {
 	glEnd();
 
 	glBegin(GL_QUADS); //left 
-	glColor3f(1, 1, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-2, -1, -3);
 	glTexCoord2f(0, 1);
@@ -793,7 +853,6 @@ void drawArm() {
 	glEnd();
 
 	glBegin(GL_QUADS); //right 
-	glColor3f(0, 0, 0);
 	glTexCoord2f(0, 0);
 	glVertex3f(2, -1, -3);
 	glTexCoord2f(0, 1);
@@ -804,24 +863,37 @@ void drawArm() {
 	glVertex3f(1, 1, -1);
 	glEnd();
 
+	glDeleteTextures(1, &wrist);
+
+
+
+	GLuint arm = loadTexture("metalweb.bmp");
+
 	glPopMatrix();
 	glPushMatrix();
 	glTranslatef(3.5, -13, 0);
 	glRotatef(90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 255, 255, 0, GLU_LINE);
+	drawCylinder(3, 3, 15, 255, 255, 255, GLU_FILL , arm);
 	glPopMatrix();
 	glPopMatrix();
 
+	GLuint joint = loadTexture("join.bmp");
 	glPushMatrix();
 	glTranslatef(3.5, -2.5, 0);
-	drawSphere(3, 1, 1, 1, GLU_FILL);
+	glRotatef(90, 0, 1, 0);
+	drawSphere(3, 255, 255, 255, GLU_FILL , joint);
 	glPopMatrix();
+
+	glDeleteTextures(1, &joint);
 
 	glPushMatrix();
 	glTranslatef(3.5, -3, 0);
 	glRotatef(90, 1, 0, 0);
-	drawCylinder(3, 3, 25, 255, 255, 0, GLU_LINE);
+	drawCylinder(3, 3, 20, 255, 255, 255, GLU_FILL , arm);
 	glPopMatrix();
+
+	glDeleteTextures(1, &arm);
+	glDeleteTextures(1, &joint);
 }
 
 void display()
@@ -833,9 +905,8 @@ void display()
 	glEnable(GL_TEXTURE_2D);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1, 0, 1, 1);
-
 	glMatrixMode(GL_MODELVIEW);
-	//glRotatef(0.05, 0, 1, 0);
+	glRotatef(1, 0, 1, 0);
 
 	drawArm();
 
@@ -893,7 +964,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity;
-	glOrtho(-80, 80, -45, 45, -100, 100);
+	glOrtho(-80, 80, -45, 45, -10, 10);
 
 	while (true)
 	{
