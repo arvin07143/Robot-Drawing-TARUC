@@ -250,21 +250,6 @@ void drawCube() {
 	glEnd();  // End of drawing color-cube
 }
 
-void drawSkyBox() {
-	glPushMatrix();
-	GLuint text = loadTexture("left.bmp");
-	glTexCoord2f(0, 0);
-	glVertex3f(-80, -45, 100);
-	glTexCoord2f(0, 1);
-	glVertex3f(-80, 45, 100);
-	glTexCoord2f(1, 0);
-	glVertex3f(80, 45, 100);
-	glTexCoord2f(1, 1);
-	glVertex3f(80, -45, 100);
-
-	glPopMatrix();
-}
-
 void upperArm() {
 	glPushMatrix();
 	glTranslatef(-5, 0, 0);
@@ -296,7 +281,7 @@ void finger(float length) {
 	glPushMatrix();
 	glTranslatef(18, 0, 0);
 	glRotatef(90, 0, 1, 0);
-	drawSphere(1.8, 0, 0, 255, GLU_LINE);
+	drawSphere(1.8, 255, 255, 255, GLU_LINE);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -308,7 +293,7 @@ void finger(float length) {
 	glPushMatrix();
 	glTranslatef(9.5, 0, 0);
 	glRotatef(90, 0, 1, 0);
-	drawSphere(1.8,0, 0, 255, GLU_LINE);
+	drawSphere(1.8,255, 255, 255, GLU_LINE);
 	glPopMatrix();
 
 	//fingertip
@@ -366,110 +351,104 @@ void finger(float length) {
 	glPopMatrix();
 }
 
-void drawFinger() {
-	GLuint lowerFing = loadTexture("texture.bmp");
-	glPushMatrix();
-	glScalef(0.7, 0.7, 0.7);
-	glPushMatrix();//fing1
-	glRotatef(widenFing, 0, 0, 1);
-	glPushMatrix();
-	glRotatef(fingerAngle, 1, 0, 0);
-	glTranslatef(-14, 0, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 15, 255, 255, 255, GLU_FILL);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-14, -20, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 0, 255, 255, GLU_FILL , lowerFing);
-	glPopMatrix();
-	glPopMatrix();
-
-	//drawSphere()
-									//fing2
-
-	glPushMatrix();
-	glPushMatrix();
-	glRotatef(widenFing * 0.5, 0, 0, 1);
-	glRotatef(fingerAngle, 1, 0, 0);
-	glTranslatef(-7, 0, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 17, 255, 255, 255, GLU_LINE);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-7, -20, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 0, 255, 255, GLU_FILL, lowerFing);
-	glPopMatrix();
-	glPopMatrix();
-
-								//fing3
-
-	glPushMatrix();
-	glRotatef(fingerAngle, 1, 0, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 255, 255, 255, GLU_LINE);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0, -20, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 0, 255, 255, GLU_FILL, lowerFing);
-	glPopMatrix();
-
-						//fing4
-
-	glPushMatrix();
-	glRotatef(widenFing * -0.5, 0, 0, 1);
-	glPushMatrix();
-	glRotatef(fingerAngle, 1, 0, 0);
-	glTranslatef(7, 0, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 17, 255, 255, 255, GLU_LINE);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(7, -20, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 0, 255, 255, GLU_FILL, lowerFing);
-	glPopMatrix();
-	glPopMatrix();
-
-							//fing5
-	glPushMatrix(); //finger rotation matrix
-	glRotatef(widenFing * -1, 0, 0, 1);
-	glPushMatrix();
-	glRotatef(fingerAngle, 1, 0, 0);
-	glTranslatef(14, 0, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 10, 255, 255, 255, GLU_LINE);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(14, -20, 0);
-	glRotatef(-90, 1, 0, 0);
-	drawCylinder(3, 3, 20, 0, 255, 255, GLU_FILL, lowerFing);
-	glPopMatrix();
-	glPopMatrix();
-	glPopMatrix();
-}
-
 void drawPalm() {
-	glPushMatrix();
-	glTranslatef(0, -21, 0);
-	glScalef(11, 11, 2.5);
-	drawCube();
-	glPopMatrix();
+	glBegin(GL_POLYGON); //z = -1
+	glVertex3f(0,0,-1);
+	glVertex3f(1,0,-1);
+	glVertex3f(1.2,1,-1);
+	glVertex3f(1,2,-1);
+	glVertex3f(0,2,-1);
+	glVertex3f(-0.2,1,-1);
+	glEnd();
+
+	glBegin(GL_POLYGON); //z = 1
+	glVertex3f(0, 0, 1);
+	glVertex3f(1, 0, 1);
+	glVertex3f(1.2, 1, 1);
+	glVertex3f(1, 2, 1);
+	glVertex3f(0, 2, 1);
+	glVertex3f(-0.2, 1, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(0, 2, -1);
+	glVertex3f(0, 2, 1);
+	glVertex3f(-0.2, 1, 1);
+	glVertex3f(-0.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(1, 2, -1);
+	glVertex3f(1, 2, 1);
+	glVertex3f(1.2, 1, 1);
+	glVertex3f(1.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(0, 0, -1);
+	glVertex3f(0, 0, 1);
+	glVertex3f(-0.2, 1, 1);
+	glVertex3f(-0.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(1, 1, -1);
+	glVertex3f(1, 1, 1);
+	glVertex3f(1.2, 1, 1);
+	glVertex3f(1.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(0, 2, -1);
+	glVertex3f(1, 2, -1);
+	glVertex3f(1, 2, 1);
+	glVertex3f(0, 2, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(0, 0, -1);
+	glVertex3f(1, 0, -1);
+	glVertex3f(1, 0, 1);
+	glVertex3f(0, 0, 1);
+	glEnd();
 }
 
 void drawHand() {
 	glPushMatrix();
-	glTranslatef(-45, 0, 0);
-	glRotatef(90, 0, 0, 1);
-	drawFinger();
+	glTranslatef(-2, -22.5, 0);
+	glScalef(18, 12, 2);
 	drawPalm();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 25, 0);
+	glRotatef(-90, 0, 0, 1);
+	finger(5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(4.5, 27, 0);
+	glRotatef(-90, 0, 0, 1);
+	finger(7);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(9, 25, 0);
+	glRotatef(-90, 0, 0, 1);
+	finger(5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(13.5, 23, 0);
+	glRotatef(-90, 0, 0, 1);
+	finger(3);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-8, 3, 0);
+	glRotatef(-70, 0, 0, 1);
+	glScalef(0.6, 1, 1);
+	finger(3);
 	glPopMatrix();
 }
 
@@ -481,7 +460,7 @@ void wholeArm() {
 	glTranslatef(-18, 0, 0);
 	glRotatef(90, 1, 0, 0);
 	lowerArm();
-	drawHand();
+	//drawHand();
 	glPopMatrix();
 	upperArm();
 	glPopMatrix();
@@ -766,6 +745,84 @@ void drawLeg() {
 	glPopMatrix();
 }
 
+void drawArm() {
+	glPushMatrix();
+	glTranslatef(0, 30, 0);
+	glPushMatrix();
+	glScalef(0.5, 0.5, 1);
+	drawHand();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(3.5, -12.1, 0);
+	glScalef(2, 1, 1);
+	glBegin(GL_QUADS); //front ( z = -1)
+	glColor3f(1, 1, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(-2, -1, -3);
+	glTexCoord2f(0, 1);
+	glVertex3f(2, -1, -3);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 1, -1);
+	glTexCoord2f(1, 1);
+	glVertex3f(-1, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS); //back ( z = 1)
+	glColor3f(1, 0, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(-2, -1, 3);
+	glTexCoord2f(0, 1);
+	glVertex3f(2, -1, 3);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(-1, 1, 1);
+	glEnd();
+
+	glBegin(GL_QUADS); //left 
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-2, -1, -3);
+	glTexCoord2f(0, 1);
+	glVertex3f(-2, -1, 3);
+	glTexCoord2f(1, 0);
+	glVertex3f(-1, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(-1, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS); //right 
+	glColor3f(0, 0, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(2, -1, -3);
+	glTexCoord2f(0, 1);
+	glVertex3f(2, -1, 3);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 1, -1);
+	glEnd();
+
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(3.5, -13, 0);
+	glRotatef(90, 1, 0, 0);
+	drawCylinder(3, 3, 20, 255, 255, 0, GLU_LINE);
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(3.5, -2.5, 0);
+	drawSphere(3, 1, 1, 1, GLU_FILL);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(3.5, -3, 0);
+	glRotatef(90, 1, 0, 0);
+	drawCylinder(3, 3, 25, 255, 255, 0, GLU_LINE);
+	glPopMatrix();
+}
 
 void display()
 {
@@ -778,13 +835,11 @@ void display()
 	glClearColor(1, 0, 1, 1);
 
 	glMatrixMode(GL_MODELVIEW);
-	//glRotatef(0.01, 0, 1, 0);
+	//glRotatef(0.05, 0, 1, 0);
 
-	finger(10);
-	glPushMatrix();
-	glTranslatef(0, -10, 0);
-	finger(20);
-	glPopMatrix();
+	drawArm();
+
+
 
 	
 	//
