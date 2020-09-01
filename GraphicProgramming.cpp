@@ -12,7 +12,7 @@
 
 double fingerAngle = 0;
 double widenFing = 0;
-double armAngle = 0;
+double elbowAngle = 0;
 
 double kneeAngle = 0;
 BITMAP BMP;
@@ -119,7 +119,7 @@ void drawSphere(float radius, float r, float g, float b, int type , GLuint text)
 	glBindTexture(GL_TEXTURE_2D, text);
 	gluQuadricTexture(sphere, GL_TRUE);
 	gluQuadricNormals(sphere, GLU_SMOOTH);
-	//glColor3f(r, g, b);
+	glColor3f(r, g, b);
 	gluSphere(sphere, radius, 30, 30);
 
 	gluDeleteQuadric(sphere);
@@ -149,10 +149,13 @@ void drawCylinder(float btm, float top, float height, float r, float g, float b,
 	gluDeleteQuadric(cylinder);
 }
 
-void drawDisk(float inner, float outer, float r, float g, float b, int type) {
+void drawDisk(float inner, float outer, float r, float g, float b, int type ,GLuint text) {
 
 	GLUquadricObj* disk = gluNewQuadric();
 	gluQuadricDrawStyle(disk, type);
+	glBindTexture(GL_TEXTURE_2D, text);
+	gluQuadricTexture(disk, GL_TRUE);
+	gluQuadricNormals(disk, GLU_SMOOTH);
 	glColor3f(r, g, b);
 	gluDisk(disk, inner, outer, 30, 30);
 
@@ -246,23 +249,6 @@ void drawCube() {
 	glEnd();  // End of drawing color-cube
 }
 
-void upperArm() {
-	glPushMatrix();
-	glTranslatef(-5, 0, 0);
-	glPushMatrix();
-	glRotatef(90, 0, 1, 0);
-	drawCylinder(8, 8, 40, 255, 255, 255, GLU_LINE);
-	glPopMatrix();
-	glPopMatrix();
-}
-
-void lowerArm() {
-	glPushMatrix();
-	glTranslatef(15, 0, 0);
-	glRotatef(-90, 0, 1, 0);
-	drawCylinder(4, 4.5, 30, 255, 255, 255, GLU_LINE);
-	glPopMatrix();
-}
 
 void finger(float length) {
 	//fingerbase
@@ -510,20 +496,6 @@ void drawHand() {
 	glRotatef(-70, 0, 0, 1);
 	glScalef(0.6, 1, 1);
 	finger(3);
-	glPopMatrix();
-}
-
-void wholeArm() {
-	glPushMatrix();
-	glTranslatef(18, -10, 0);
-	glPushMatrix();
-	glRotatef(armAngle, 0, 0, 1);
-	glTranslatef(-18, 0, 0);
-	glRotatef(90, 1, 0, 0);
-	lowerArm();
-	//drawHand();
-	glPopMatrix();
-	upperArm();
 	glPopMatrix();
 }
 
@@ -808,6 +780,10 @@ void drawLeg() {
 
 void drawArm() {
 	glPushMatrix();
+	glTranslatef(0,-7, 0);
+	glRotatef(elbowAngle, 1, 0, 0);
+	glTranslatef(0, 7, 0);
+	glPushMatrix();
 	glTranslatef(0, 27, 0);
 	glPushMatrix();
 	glScalef(0.5, 0.5, 1);
@@ -873,27 +849,434 @@ void drawArm() {
 	glPushMatrix();
 	glTranslatef(3.5, -13, 0);
 	glRotatef(90, 1, 0, 0);
-	drawCylinder(3, 3, 15, 255, 255, 255, GLU_FILL , arm);
+	drawCylinder(3, 3, 20, 255, 255, 255, GLU_FILL , arm);
 	glPopMatrix();
 	glPopMatrix();
 
 	GLuint joint = loadTexture("join.bmp");
 	glPushMatrix();
-	glTranslatef(3.5, -2.5, 0);
+	glTranslatef(3.5, -6.5, 0);
 	glRotatef(90, 0, 1, 0);
 	drawSphere(3, 255, 255, 255, GLU_FILL , joint);
+	glPopMatrix();
+
 	glPopMatrix();
 
 	glDeleteTextures(1, &joint);
 
 	glPushMatrix();
-	glTranslatef(3.5, -3, 0);
+	glTranslatef(3.5, -8, 0);
 	glRotatef(90, 1, 0, 0);
 	drawCylinder(3, 3, 20, 255, 255, 255, GLU_FILL , arm);
 	glPopMatrix();
 
 	glDeleteTextures(1, &arm);
 	glDeleteTextures(1, &joint);
+}
+
+void lowerBody() {
+
+	glPushMatrix();
+	glRotatef(180, 0, 1, 0);
+	glPushMatrix();
+	glScalef(20, 20, 4);
+
+	GLuint metal = loadTexture("blackpolish.bmp");
+
+	glBegin(GL_POLYGON);// z=-1 front
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0,0.2);
+	glVertex3f(0, 0, -1);
+	glTexCoord2f(0.5, 0);
+	glVertex3f(0.5, -0.2, -1);
+	glTexCoord2f(1, 0.2);
+	glVertex3f(1, 0, -1);
+	glTexCoord2f(0.8, 1);
+	glVertex3f(0.9, 1, -1);
+	glTexCoord2f(0.2, 1);
+	glVertex3f(0.1, 1, -1);
+	glEnd();
+
+	glBegin(GL_POLYGON);// z=1
+	glTexCoord2f(0, 0.2);
+	glVertex3f(0, 0, 1);
+	glTexCoord2f(0.5, 0);
+	glVertex3f(0.5, -0.2, 1);
+	glTexCoord2f(1, 0.2);
+	glVertex3f(1, 0, 1);
+	glTexCoord2f(0.8, 1);
+	glVertex3f(0.9, 1, 1);
+	glTexCoord2f(0.2, 1);
+	glVertex3f(0.1, 1, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.1, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.1, 1, -1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0, 0, -1);
+	glTexCoord2f(1, 1);
+	glVertex3f(0, 0, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.9, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.9, 1, -1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 0, -1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 0, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5, -0.2, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.5, -0.2, -1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0, 0, -1);
+	glTexCoord2f(1, 1);
+	glVertex3f(0, 0, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5, -0.2, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.5, -0.2, -1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 0, -1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 0, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(0.1, 1, -1);
+	glVertex3f(0.9, 1, -1);
+	glVertex3f(0.9, 1, 1);
+	glVertex3f(0.1, 1, 1);
+	glEnd();
+
+	glDeleteTextures(1, &metal);
+	glPopMatrix();
+
+	GLuint machine = loadTexture("metal.bmp");
+
+	glPushMatrix();
+	glTranslatef(0, 0, -4);
+	glScalef(20, 20, 3);
+	glBegin(GL_POLYGON);// z=-1 front
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.1, 1, -1);
+	glTexCoord2f(0.15, 0.1);
+	glVertex3f(0.25, -0.1, -0.5);
+	glTexCoord2f(0.5, 0);
+	glVertex3f(0.5, -0.2, 0);
+	glTexCoord2f(0.65, 0.1);
+	glVertex3f(0.75, -0.1, -0.5);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.9, 1, -1);
+	glEnd();
+
+	glBegin(GL_POLYGON);// z=0 back
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.1, 1, 0);
+	glTexCoord2f(0.15, 0.1);
+	glVertex3f(0.25, -0.1, 0);
+	glTexCoord2f(0.5, 0);
+	glVertex3f(0.5, -0.2, 0);
+	glTexCoord2f(0.65, 0.1);
+	glVertex3f(0.75, -0.1, 0);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.9, 1, 0);
+	glEnd();
+
+	glDeleteTextures(1, &machine);
+
+	glBegin(GL_QUADS);
+	glColor3f(0, 0, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.1, 1, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.1, 1, 0);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.25, -0.1, 0);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.25, -0.1, -0.5);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glColor3f(0, 0, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.9, 1, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.9, 1, 0);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.75, -0.1, 0);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.75, -0.1, -0.5);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0, 0, 0);
+	glVertex3f(0.5, -0.2, 0);
+	glVertex3f(0.25, -0.1, -0.5);
+	glVertex3f(0.25, -0.1, 0);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0, 0, 0);
+	glVertex3f(0.5, -0.2, 0);
+	glVertex3f(0.75, -0.1, -0.5);
+	glVertex3f(0.75, -0.1, 0);
+	glEnd();
+
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -6);
+	glRotatef(-8, 1, 0, 0);
+	glScalef(20, 20, 2);
+
+	GLuint text = loadTexture("circular.bmp");
+
+	glBegin(GL_QUADS); //front
+	glColor3f(1, 0, 0);
+	glTexCoord2f(0.5,1);
+	glVertex3f(0.5, 1, 1);
+	glTexCoord2f(0,0.5);
+	glVertex3f(0.1682, 0.5, 1);
+	glTexCoord2f(0.5,0);
+	glVertex3f(0.5, -0.2, 1);
+	glTexCoord2f(1,0.5);
+	glVertex3f(0.8318, 0.5, 1);
+	glEnd();
+
+	
+
+	glBegin(GL_POLYGON); //back
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0.5, 1);
+	glVertex3f(0.5, 1, 0);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(0.1682, 0.5, 0);
+	glTexCoord2f(0.5, 1);
+	glVertex3f(0.5, -0.2, 0);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(0.8318, 0.5, 0);
+	glEnd();
+
+	glBegin(GL_QUADS); //left top
+	glTexCoord2f(1, 1);
+	glVertex3f(0.5, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.1682, 0.5, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.1682, 0.5, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5, 1, 0);
+	glEnd();
+
+	glBegin(GL_QUADS); //RIGHT top
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.8318, 0.5, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.8318, 0.5, 0);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.5, 1, 0);
+	glEnd();
+
+	glBegin(GL_QUADS); //bottom right
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5, -0.2, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.8318, 0.5, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.8318, 0.5, 0);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.5, -0.2, 0);
+	glEnd();
+
+	glBegin(GL_QUADS); //left bottom
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5, -0.2, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.1682, 0.5, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.1682, 0.5, 0);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.5, -0.2, 0);
+	glEnd();
+
+	glDeleteTextures(1, &text);
+
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(10, 9, -7.5);
+	glRotatef(-8, 1, 0, 0);
+	glScalef(20, 20, 2);
+	GLuint dot = loadTexture("dotted.bmp");
+	drawDisk(0.1, 0.2, 1, 0, 0, GLU_FILL , dot);
+	glDeleteTextures(1, &dot);
+	glPopMatrix();
+	glPopMatrix();
+
+}
+
+void upperBody() {
+	GLuint electronic = loadTexture("electronic.bmp");
+	glPushMatrix();
+	glTranslatef(-18, 20, 0);
+	glScalef(16, 8, 4);
+	glBegin(GL_POLYGON); //z = -1
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0.2, 0);
+	glVertex3f(0, 0, -1);
+	glTexCoord2f(0.8, 0);
+	glVertex3f(1, 0, -1);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(1.2, 1, -1);
+	glTexCoord2f(0.8, 1);
+	glVertex3f(1, 2, -1);
+	glTexCoord2f(0.2, 1);
+	glVertex3f(0, 2, -1);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(-0.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_POLYGON); //z = 1
+	glTexCoord2f(0.2, 0);
+	glVertex3f(0, 0, 1);
+	glTexCoord2f(0.8, 0);
+	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(0.8, 1);
+	glVertex3f(1, 2, 1);
+	glTexCoord2f(0.2, 1);
+	glVertex3f(0, 2, 1);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(-0.2, 1, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0, 2, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0, 2, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(-0.2, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(-0.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(1, 2, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 2, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0, 0, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0, 0, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(-0.2, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(-0.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(1, 1, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 1, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1.2, 1, -1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0, 2, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 2, -1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 2, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(0, 2, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(0, 0, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 0, -1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(0, 0, 1);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(1, 0, -1);
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1.2, 1, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1.2, 1, -1);
+	glEnd();
+	glPopMatrix();
+
+	glDeleteTextures(1, &electronic);
+
+	GLuint socket = loadTexture("join.bmp");
+
+	glPushMatrix();
+	glTranslatef(-23, 28, 0);
+	glRotatef(90, 1, 0, 0);
+	drawSphere(3,1,1,1,GLU_FILL,socket);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(4, 28, 0);
+	glRotatef(90, 1, 0, 0);
+	drawSphere(3, 1, 1, 1, GLU_FILL,socket);
+	glPopMatrix();
+
+	glDeleteTextures(1, &socket);
+
+	GLuint polish = loadTexture("blackpolish.bmp");
+	glPushMatrix();
+	glTranslatef(-29, 28, 0);
+	glScalef(3, 3, 4);
+	drawCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(10, 28, 0);
+	glScalef(3, 3, 4);
+	drawCube();
+	glPopMatrix();
+	glDeleteTextures(1, &polish);
 }
 
 void display()
@@ -908,8 +1291,36 @@ void display()
 	glMatrixMode(GL_MODELVIEW);
 	glRotatef(1, 0, 1, 0);
 
-	drawArm();
+	lowerBody();
+	upperBody();
 
+	glPushMatrix();
+	glTranslatef(-29, 15, 3);
+	glRotatef(90, 0, 1, 0);
+	glRotatef(180, 1, 0, 0);
+	glScalef(1, 0.5, 0.8);
+	drawArm();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(10, 15, 3);
+	glRotatef(90, 0, 1, 0);
+	glRotatef(180, 1, 0, 0);
+	glScalef(1, 0.5, 0.8);
+	drawArm();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-16, -20, 7);
+	drawLeg();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-4, -20, 7);
+	drawLeg();
+	glPopMatrix();
+
+	
 
 
 	
@@ -964,7 +1375,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity;
-	glOrtho(-80, 80, -45, 45, -10, 10);
+	glOrtho(-80, 80, -45, 45, -45, 45);
 
 	while (true)
 	{
