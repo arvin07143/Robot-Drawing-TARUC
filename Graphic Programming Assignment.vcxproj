@@ -24,10 +24,6 @@
       </SubType>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\Downloads\Daylight Box UV.bmp" />
-    <Image Include="..\..\..\Downloads\text.bmp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
