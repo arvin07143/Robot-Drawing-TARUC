@@ -28,6 +28,9 @@
     <Image Include="..\..\..\Downloads\Daylight Box UV.bmp" />
     <Image Include="..\..\..\Downloads\text.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Downloads\glext.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
