@@ -264,6 +264,17 @@ void drawCylinder(float btm, float top, float height, float r, float g, float b,
 	gluDeleteQuadric(cylinder);
 }
 
+void drawCylinder(float btm, float top, float height,int type, GLuint text) {
+
+	GLUquadricObj* cylinder = gluNewQuadric();
+	gluQuadricDrawStyle(cylinder, type);
+	glBindTexture(GL_TEXTURE_2D, text);
+	gluQuadricTexture(cylinder, GL_TRUE);
+	gluQuadricNormals(cylinder, GLU_SMOOTH);
+	gluCylinder(cylinder, btm, top, height, 30, 30);
+	gluDeleteQuadric(cylinder);
+}
+
 
 void drawCylinder(float btm, float top, float height, float r, float g, float b, int type, GLuint text) {
 
@@ -1747,6 +1758,122 @@ void drawCube() {
 	glEnd();  // End of drawing color-cube
 }
 
+void drawChevron() {
+	GLuint gold = loadTexture("gold.bmp");
+	glBegin(GL_QUADS);  //front
+	glColor3f(1, 1, 1);
+
+	glTexCoord2f(0, 1);
+	glVertex3f(0, 2, -1.2);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(0.5, 1.6, -1.2);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.5, 1.2, -1.2);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(0, 1.6, -1.2);
+	glEnd();
+
+	glBegin(GL_QUADS); //back
+	glColor3f(1, 1, 1);
+
+	glTexCoord2f(0, 1);
+	glVertex3f(0, 2, -1.01);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(0.5, 1.6, -1.01);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.5, 1.2, -1.01);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(0, 1.6, -1.01);
+	glEnd();
+
+	glBegin(GL_QUADS); //top
+	glColor3f(1, 1, 1);
+
+	glVertex3f(0, 2, -1.01);
+	glVertex3f(0.5, 1.6, -1.01);
+	glVertex3f(0.5, 1.2, -1.2);
+	glVertex3f(0, 2, -1.2);
+	glEnd();
+
+	glBegin(GL_QUADS); //bottom
+	glVertex3f(0, 1.6, -1.2);
+	glVertex3f(0.5, 1.2, -1.2);
+	glVertex3f(0.5, 1.2, -1.01);
+	glVertex3f(0, 1.6, -1.01);
+	glEnd();
+
+	glBegin(GL_QUADS); //left
+	glVertex3f(0, 2, -1.2);
+	glVertex3f(0, 2, -1.01);
+	glVertex3f(0, 1.6, -1.01);
+	glVertex3f(0, 1.6, -1.2);
+	glEnd();
+
+	glBegin(GL_QUADS); //right
+	glVertex3f(0.5, 1.2, -1.2);
+	glVertex3f(0.5, 1.2, -1.01);
+	glVertex3f(0.5, 1.6, -1.01);
+	glVertex3f(0.5, 1.6, -1.2);
+	glEnd();
+
+	//new
+	glBegin(GL_QUADS);  //front
+	glColor3f(1, 1, 1);
+
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 2, -1.2);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(0.5, 1.6, -1.2);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.5, 1.2, -1.2);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(1, 1.6, -1.2);
+	glEnd();
+
+	glBegin(GL_QUADS); //back
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 2, -1.01);
+	glTexCoord2f(1, 0.5);
+	glVertex3f(0.5, 1.6, -1.01);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.5, 1.2, -1.01);
+	glTexCoord2f(0, 0.5);
+	glVertex3f(1, 1.6, -1.01);
+	glEnd();
+
+	glBegin(GL_QUADS); //top
+	glColor3f(1, 1, 1);
+
+	glVertex3f(1, 2, -1.01);
+	glVertex3f(0.5, 1.6, -1.01);
+	glVertex3f(0.5, 1.2, -1.2);
+	glVertex3f(1, 2, -1.2);
+	glEnd();
+
+	glBegin(GL_QUADS); //bottom
+	glVertex3f(1, 1.6, -1.2);
+	glVertex3f(0.5, 1.2, -1.2);
+	glVertex3f(0.5, 1.2, -1.01);
+	glVertex3f(1, 1.6, -1.01);
+	glEnd();
+
+	glBegin(GL_QUADS); //right
+	glVertex3f(1, 2, -1.2);
+	glVertex3f(1, 2, -1.01);
+	glVertex3f(1, 1.6, -1.01);
+	glVertex3f(1, 1.6, -1.2);
+	glEnd();
+
+	glBegin(GL_QUADS); //left
+	glVertex3f(0.5, 1.2, -1.2);
+	glVertex3f(0.5, 1.2, -1.01);
+	glVertex3f(0.5, 1.6, -1.01);
+	glVertex3f(0.5, 1.6, -1.2);
+	glEnd();
+
+	glDeleteTextures(1, &gold);
+}
 
 void finger(float length, float fingerAngle) {
 	//fingerbase
@@ -2380,6 +2507,11 @@ void lowerBody() {
 	glPushMatrix();
 	glScalef(20, 20, 4);
 
+	glPushMatrix();
+	glTranslatef(0.01, -1.4, 2.3);
+	drawChevron();
+	glPopMatrix();
+
 	GLuint metal = loadTexture("blackpolish.bmp");
 
 	glBegin(GL_POLYGON);// z=-1 front
@@ -2629,6 +2761,7 @@ void lowerBody() {
 	glPopMatrix();
 	glPopMatrix();
 
+	
 }
 
 void upperBody() {
@@ -2743,9 +2876,38 @@ void upperBody() {
 	glTexCoord2f(1, 1);
 	glVertex3f(1.2, 1, -1);
 	glEnd();
+
+	glPushMatrix();
+	drawChevron();
+	glPushMatrix();
+	glTranslatef(0, -0.6, 0);
+	drawChevron();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, -1.2, 0);
+	drawChevron();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, 2.1);
+	drawChevron();
+	glPushMatrix();
+	glTranslatef(0, -0.6, 0);
+	drawChevron();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, -1.2, 0);
+	drawChevron();
+	glPopMatrix();
+	glPopMatrix();
+
+
 	glPopMatrix();
 
 	glDeleteTextures(1, &electronic);
+
+
 
 	GLuint socket = loadTexture("join.bmp");
 
@@ -2830,18 +2992,7 @@ void drawLeftArm() {
 	glPopMatrix();
 }
 
-void display()
-{
-	//--------------------------------
-	//	OpenGL drawing
-	//--------------------------------
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE_2D);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1, 0, 1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glRotatef(1, 0, 1, 0);
-
+void whole() {
 	glPushMatrix();
 	glTranslatef(translateX, translateY, translateZ);
 
@@ -2850,7 +3001,7 @@ void display()
 	glPushMatrix();
 	glScalef(30, 25, 30);
 	glRotatef(180, 0, 1, 0);
-	glTranslatef(0,0.85, -0.4);
+	glTranslatef(0, 0.85, -0.4);
 	drawHelmet();
 	glPopMatrix();
 	glPopMatrix();
@@ -2866,9 +3017,9 @@ void display()
 
 	rightLeg();
 
-	
+
 	leftLeg();
-	
+
 
 	glPopMatrix();
 	glPopMatrix();
@@ -2883,6 +3034,22 @@ void display()
 	//drawHammerHilt();
 
 	glDisable(GL_TEXTURE_2D);
+}
+
+void display()
+{
+	//--------------------------------
+	//	OpenGL drawing
+	//--------------------------------
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(1, 0, 1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glRotatef(0.1, 0, 1, 0);
+
+	whole();
+
 
 
 	
