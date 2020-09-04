@@ -10,17 +10,29 @@
 
 #define WINDOW_TITLE "OpenGL Window"
 
-double fingerAngle = 0;
+
+double leftFingerAngle = 0, rightFingerAngle = 0;;
 double widenFing = 0;
 double elbowAngle = 0;
+double rightArmAngle = 0;
+double leftArmAngle = 0;
+
 
 double kneeAngle = 0;
+double leftMoveForwardAngle = 0;
+double rightMoveForwardAngle = 0;
+double translateX = 0, translateY = 0, translateZ = 0;
+double rightArmRotationX = 0, rightArmRotationY = 0, rightArmRotationZ = 0;
+double leftArmRotationX = 0, leftArmRotationY = 0, leftArmRotationZ = 0;
+double moveCount = 0;
+double neckRotateAngle = 0;
+
+
+double rightLegX = 0, rightLegY = 0, rightLegZ = 0;
+double leftLegX = 0, leftLegY = 0, leftLegZ = 0;
 BITMAP BMP;
 HBITMAP hBMP = NULL;
 using namespace std;
-
-BITMAP BMP;
-HBITMAP hBMP = NULL;
 
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -34,17 +46,127 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	case WM_KEYDOWN:
 		switch (wParam) {
 		case VK_UP:
-				fingerAngle -= 3;
+			if (leftFingerAngle <= 100)
+				leftFingerAngle += 3;
+			if (rightFingerAngle >= -100)
+				rightFingerAngle -= 3;
+			break;
+		case VK_DOWN:
+			if (leftFingerAngle >= 1)
+				leftFingerAngle -= 3;
+			if (rightFingerAngle <= -1)
+				rightFingerAngle += 3;
 			break;
 		case VK_LEFT:
-			fingerAngle += 3;
+			neckRotateAngle -= 1;
 			break;
 		case VK_RIGHT:
-			if (kneeAngle > -10)kneeAngle -= 5;
+			neckRotateAngle += 1;
+			break;
+
+		case 'U':
+			rightArmRotationX = 1;
+			rightArmRotationZ = 0;
+			rightArmRotationY = 0;
+			if (rightArmAngle >= - 180)
+				rightArmAngle -= 3;
+			break;
+		case 'L':
+			rightArmRotationX = 1;
+			rightArmRotationZ = 0;
+			rightArmRotationY = 0;
+			if (rightArmAngle <= -1)
+				rightArmAngle += 3;
+			break;
+		case 'Y':
+			leftArmRotationX = 1;
+			leftArmRotationZ = 0;
+			leftArmRotationY = 0;
+			if (leftArmAngle >= -180)
+				leftArmAngle -= 3;
+			break;
+		case 'T':
+			leftArmRotationX = 1;
+			leftArmRotationZ = 0;
+			leftArmRotationY = 0;
+			if (leftArmAngle <= -1)
+				leftArmAngle += 3;
+			break;
+		case 'I':
+			rightArmRotationZ = 1;
+			if (rightArmAngle >= -90) {
+				rightArmAngle -= 3;
+			}
+			break;
+		case 'F':
+			rightArmRotationZ = 1;
+			if (rightArmAngle <= 0)
+				rightArmAngle += 3;
+			break;
+		case 'G':
+			leftArmRotationZ = 1;
+			if (leftArmAngle <= 90)
+				leftArmAngle += 3;
+			break;
+		case 'H':
+			leftArmRotationZ = 1;
+			if (leftArmAngle >= 1)
+				leftArmAngle -= 3;
+			break;
+		case 'J':
+
+		/*case 'W':
+			moveCount++;
+
+			if (moveCount > 0 && moveCount <= 25) {
+				leftMoveForwardAngle--;
+				leftLegY += 0.03;
+				if (rightMoveForwardAngle < 0) {
+					rightMoveForwardAngle++;
+					rightLegY -= 0.03;
+				}
+				translateZ -= 0.05;
+			}	
+
+			if (moveCount > 26 && moveCount <= 51) {
+				leftMoveForwardAngle++;
+				leftLegY -= 0.03;
+				rightMoveForwardAngle--;
+				rightLegY += 0.03;
+				translateZ = -0.05;
+			}
+
+			if (moveCount == 52) {
+				moveCount = 0;
+			}
+			break;
+		case 'S':
+			moveCount++;
+
+			if (moveCount > 0 && moveCount <= 25) {
+				leftMoveForwardAngle++;
+				leftLegY += 0.03;
+				if (rightMoveForwardAngle > 0) {
+					rightMoveForwardAngle--;
+					rightLegY -= 0.03;
+				}
+				translateZ += 0.05;
+			}
+
+			if (moveCount > 26 && moveCount <= 51) {
+				leftMoveForwardAngle--;
+				leftLegY -= 0.03;
+				rightMoveForwardAngle++;
+				rightLegY += 0.03;
+				translateZ += 0.05;
+			}
+
+			if (moveCount == 52) {
+				moveCount = 0;
+			}*/
+
 			break;
 		}
-
-		break;
 
 	default:
 		break;
@@ -88,24 +210,8 @@ bool initPixelFormat(HDC hdc)
 }
 //--------------------------------------------------------------------
 
-<<<<<<< HEAD
-GLuint loadTexture(LPCSTR filename) {
-	GLuint texture = 0;
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	HBITMAP hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		filename, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
-		LR_LOADFROMFILE);
-	GetObject(hBMP, sizeof(BMP), &BMP);
 
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-		GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-		GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
-		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
-=======
+
 GLuint loadTexture(LPCSTR fileName) {
 	GLuint texture = 0;
 
@@ -120,7 +226,6 @@ GLuint loadTexture(LPCSTR fileName) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
->>>>>>> parent of e7121b9... Revert "update"
 
 	DeleteObject(hBMP);
 
@@ -136,7 +241,6 @@ void drawSphere(float radius, float r, float g, float b, int type) {
 	gluDeleteQuadric(sphere);
 }
 
-<<<<<<< HEAD
 void drawCylinder(float btm, float top, float height, int type, GLuint text) {
 
 	GLUquadricObj* cylinder = gluNewQuadric();
@@ -148,14 +252,6 @@ void drawCylinder(float btm, float top, float height, int type, GLuint text) {
 	gluDeleteQuadric(cylinder);
 }
 
-
-void drawHelmet() {
-	GLuint texture2;
-	texture2 = loadTexture("iron1.bmp");
-	glBegin(GL_POLYGON);// top front right(front)
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 0.28, 0.1);
-=======
 void drawSphere(float radius, float r, float g, float b, int type , GLuint text) {
 	GLUquadricObj* sphere = gluNewQuadric();
 	gluQuadricDrawStyle(sphere, type);
@@ -188,7 +284,14 @@ void drawCylinder(float btm, float top, float height, float r, float g, float b,
 	gluQuadricNormals(cylinder, GLU_SMOOTH);
 	glColor3f(r, g, b);
 	gluCylinder(cylinder, btm, top, height, 30, 30);
->>>>>>> parent of e7121b9... Revert "update"
+	gluDeleteQuadric(cylinder);
+}
+void drawHelmet() {
+	GLuint texture2;
+	texture2 = loadTexture("iron1.bmp");
+	glBegin(GL_POLYGON);// top front right(front)
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(0, 0.28, 0.1);
 
 	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 0.4, 0.1);
@@ -702,9 +805,18 @@ void drawCylinder(float btm, float top, float height, float r, float g, float b,
 	glVertex3f(0, 0.1, 0.12);
 	glEnd();
 	glDeleteTextures(1, &texture13);
+
+	GLuint neckTexture = loadTexture("iron_texture.bmp");
+
+	glPushMatrix();
+	glTranslatef(0, -0.2, 0.4);
+	glRotatef(90, 1, 0, 0);
+	drawCylinder(0.1, 0.1, 0.2, 100012, neckTexture);
+	glPopMatrix();
+	glDeleteTextures(1, &neckTexture);
 }
 
-<<<<<<< HEAD
+
 void drawHilt() {
 
 	GLuint texture5 = loadTexture("black.bmp");
@@ -713,7 +825,6 @@ void drawHilt() {
 	glRotatef(-90, 1, 0, 0);
 	drawCylinder(0.015, 0.02, 0.02, GLU_FILL, texture5);//hilt
 	glPopMatrix();
-	glDeleteTextures(1, &texture5);
 
 
 	glPushMatrix();
@@ -721,7 +832,6 @@ void drawHilt() {
 	glRotatef(-90, 1, 0, 0);
 	drawCylinder(0.02, 0.02, 0.04, GLU_FILL, texture5);//hilt
 	glPopMatrix();
-	glDeleteTextures(1, &texture5);
 
 	glPushMatrix();
 	glTranslatef(0.0, 0.35, 0.0);
@@ -800,7 +910,7 @@ void drawHilt() {
 }
 
 void drawSword() {
-	GLuint texture10 = loadTexture("dark_grey.bmp");
+	GLuint texture10 = loadTexture("iron1.bmp");
 	glPushMatrix();
 	glTranslatef(0, 0.3, 0.001);
 	glRotatef(90, 1, 0, 0);
@@ -1140,7 +1250,7 @@ void drawSword() {
 	glVertex3f(0.04, 0.3, 0.005);
 	glEnd();
 
-
+	glDeleteTextures(1, &texture6);
 	glDeleteTextures(1, &texture11);
 }
 
@@ -1547,26 +1657,8 @@ void drawHammerHilt() {
 }
 
 
+	
 
-void display()
-{
-
-	glEnable(GL_DEPTH_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 1.0, 0.0, 0);
-
-
-	glColor3f(1, 1, 1);
-	//drawHelmet();
-
-	//glRotatef(0.010, 1, 1, 0);
-	//drawHilt();
-	//drawSword();
-	drawHammer();
-	drawHammerHilt();
-
-	glDisable(GL_TEXTURE_2D);
-=======
 void drawDisk(float inner, float outer, float r, float g, float b, int type ,GLuint text) {
 
 	GLUquadricObj* disk = gluNewQuadric();
@@ -1668,7 +1760,7 @@ void drawCube() {
 }
 
 
-void finger(float length) {
+void finger(float length, float fingerAngle) {
 	//fingerbase
 	//drawCylinder(3, 3, 20, 255, 255, 255, GLU_LINE);
 
@@ -1679,38 +1771,39 @@ void finger(float length) {
 	glPushMatrix();
 	glTranslatef(18.5, 0, 0);
 	glRotatef(90, 0, 1, 0);
-	drawCylinder(1.8, 1.8, length, 255, 255, 255, GLU_FILL,metal);
+	drawCylinder(1.8, 1.8, length, 255, 255, 255, GLU_FILL,metal);//third knuckles
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(18, 0, 0);
 	glRotatef(90, 1, 0, 0);
-	drawSphere(1.8, 255, 255, 255, GLU_FILL,joint);
+	drawSphere(1.8, 255, 255, 255, GLU_FILL,joint);//joint
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(18, 0, 0);
+	glTranslatef(14, 0, 0);
 	glRotatef(fingerAngle, 0, 1, 0);
-	glTranslatef(-18, 0, 0);
+	glTranslatef(-14, 0, 0);
+
 
 	glPushMatrix();
 	glTranslatef(10, 0, 0);
 	glRotatef(90, 0, 1, 0);
-	drawCylinder(1.8, 1.8, 8, 255, 255, 255, GLU_FILL,metal);
+	drawCylinder(1.8, 1.8, 8, 255, 255, 255, GLU_FILL,metal);//second knuckles
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(9.5, 0, 0);
 	glRotatef(90, 1, 0, 0);
-	drawSphere(1.8,255, 255, 255, GLU_FILL,joint);
+	drawSphere(1.8,255, 255, 255, GLU_FILL,joint);//joint
 	glPopMatrix();
 
 	glDeleteTextures(1, &joint);
 
 	glPushMatrix();
-	glTranslatef(10, 0, 0);
+	glTranslatef(6, 0, 0);
 	glRotatef(fingerAngle, 0, 1, 0);
-	glTranslatef(-10, 0, 0);
+	glTranslatef(-6, 0, 0);
 
 	GLuint fingertip = loadTexture("metal.bmp");
 
@@ -1787,7 +1880,7 @@ void drawPalm() {
 	glTexCoord2f(1, 0.5);
 	glVertex3f(1.2,1,-1);
 	glTexCoord2f(0.8, 1);
-	glVertex3f(1,2,-1);
+	glVertex3f(1,2.1,-1);
 	glTexCoord2f(0.2, 1);
 	glVertex3f(0,2,-1);
 	glTexCoord2f(0, 0.5);
@@ -1878,7 +1971,7 @@ void drawPalm() {
 	glDeleteTextures(1, &palm);
 }
 
-void drawHand() {
+void drawHand(float fingerAngle) {
 	glPushMatrix();
 	glTranslatef(-2, -22.5, 0);
 	glScalef(18, 12, 2);
@@ -1888,32 +1981,32 @@ void drawHand() {
 	glPushMatrix();
 	glTranslatef(0, 25, 0);
 	glRotatef(-90, 0, 0, 1);
-	finger(5);
+	finger(3, fingerAngle);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(4.5, 27, 0);
 	glRotatef(-90, 0, 0, 1);
-	finger(7);
+	finger(5, fingerAngle);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(9, 25, 0);
 	glRotatef(-90, 0, 0, 1);
-	finger(5);
+	finger(3, fingerAngle);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(13.5, 23, 0);
 	glRotatef(-90, 0, 0, 1);
-	finger(3);
+	finger(1, fingerAngle);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-8, 3, 0);
 	glRotatef(-70, 0, 0, 1);
 	glScalef(0.6, 1, 1);
-	finger(3);
+	finger(1, fingerAngle);
 	glPopMatrix();
 }
 
@@ -2196,7 +2289,7 @@ void drawLeg() {
 	glPopMatrix();
 }
 
-void drawArm() {
+void drawArm(float fingerAngle) {
 	glPushMatrix();
 	glTranslatef(0,-7, 0);
 	glRotatef(elbowAngle, 1, 0, 0);
@@ -2205,7 +2298,7 @@ void drawArm() {
 	glTranslatef(0, 27, 0);
 	glPushMatrix();
 	glScalef(0.5, 0.5, 1);
-	drawHand();
+	drawHand(fingerAngle);
 	glPopMatrix();
 
 	GLuint wrist = loadTexture("circular.bmp");
@@ -2671,16 +2764,50 @@ void upperBody() {
 	glPushMatrix();
 	glTranslatef(-23, 28, 0);
 	glRotatef(90, 1, 0, 0);
-	drawSphere(3,1,1,1,GLU_FILL,socket);
+	drawSphere(3,1,1,1,GLU_FILL,socket);//right hand socket
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(4, 28, 0);
 	glRotatef(90, 1, 0, 0);
-	drawSphere(3, 1, 1, 1, GLU_FILL,socket);
+	drawSphere(3, 1, 1, 1, GLU_FILL,socket);// left hand socket
 	glPopMatrix();
 
 	glDeleteTextures(1, &socket);
+
+}
+
+void leftLeg() {
+	
+	glPushMatrix();// left leg
+	glTranslatef(leftLegX, leftLegY, leftLegZ);
+	glRotatef(leftMoveForwardAngle, 1, 0, 0);
+	glTranslatef(-4, -20, 7);
+	drawLeg();
+	glPopMatrix();
+}
+
+void rightLeg() {
+	glPushMatrix();//right leg 
+	glTranslatef(rightLegX, rightLegY, rightLegZ);
+	glRotatef(rightMoveForwardAngle, 1, 0, 0);
+	glTranslatef(-16, -20, 7);
+	drawLeg();
+	glPopMatrix();
+}
+
+void drawRightArm() {
+	glPushMatrix();
+	glTranslatef(-23, 28, 0);
+	glRotatef(rightArmAngle, rightArmRotationX, rightArmRotationY, rightArmRotationZ);
+	glTranslatef(23, -28, 0);
+	glPushMatrix();
+	glTranslatef(-29, 15, 3);
+	glRotatef(90, 0, 1, 0);
+	glRotatef(180, 1, 0, 0);
+	glScalef(1, 0.5, 0.8);
+	drawArm(rightFingerAngle);
+	glPopMatrix();
 
 	GLuint polish = loadTexture("blackpolish.bmp");
 	glPushMatrix();
@@ -2688,13 +2815,31 @@ void upperBody() {
 	glScalef(3, 3, 4);
 	drawCube();
 	glPopMatrix();
+	glDeleteTextures(1, &polish);
+	glPopMatrix();
+}
 
+void drawLeftArm() {
+	glPushMatrix();
+	glTranslatef(4, 28, 0);
+	glRotatef(leftArmAngle, leftArmRotationX, leftArmRotationY, leftArmRotationZ);
+	glTranslatef(-4, -28, 0);
+	glPushMatrix();
+	glTranslatef(10, 15, 3);
+	glRotatef(90, 0, 1, 0);
+	glRotatef(180, 1, 0, 0);
+	glScalef(1, 0.5, 0.8);
+	drawArm(leftFingerAngle);
+	glPopMatrix();
+
+	GLuint polish1 = loadTexture("blackpolish.bmp");
 	glPushMatrix();
 	glTranslatef(10, 28, 0);
 	glScalef(3, 3, 4);
 	drawCube();
 	glPopMatrix();
-	glDeleteTextures(1, &polish);
+	glDeleteTextures(1, &polish1);
+	glPopMatrix();
 }
 
 void display()
@@ -2709,36 +2854,47 @@ void display()
 	glMatrixMode(GL_MODELVIEW);
 	glRotatef(1, 0, 1, 0);
 
+	glPushMatrix();
+	glTranslatef(translateX, translateY, translateZ);
+
+	glPushMatrix();
+	glRotatef(neckRotateAngle, 0, 1, 0);
+	glPushMatrix();
+	glScalef(30, 25, 30);
+	glRotatef(180, 0, 1, 0);
+	glTranslatef(0,0.85, -0.4);
+	drawHelmet();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glScalef(0.8, 0.8, 0.8);
+	glTranslatef(10, -20, 0);
 	lowerBody();
 	upperBody();
 
-	glPushMatrix();
-	glTranslatef(-29, 15, 3);
-	glRotatef(90, 0, 1, 0);
-	glRotatef(180, 1, 0, 0);
-	glScalef(1, 0.5, 0.8);
-	drawArm();
-	glPopMatrix();
+	drawRightArm();
+	drawLeftArm();
 
-	glPushMatrix();
-	glTranslatef(10, 15, 3);
-	glRotatef(90, 0, 1, 0);
-	glRotatef(180, 1, 0, 0);
-	glScalef(1, 0.5, 0.8);
-	drawArm();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-16, -20, 7);
-	drawLeg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-4, -20, 7);
-	drawLeg();
-	glPopMatrix();
+	rightLeg();
 
 	
+	leftLeg();
+	
+
+	glPopMatrix();
+	glPopMatrix();
+
+	//glRotatef(0.010, 1, 1, 0);
+	//glPushMatrix();
+	//glScalef(50, 50, 50);
+	//drawHilt();
+	//drawSword();
+	//glPopMatrix();
+	//drawHammer();
+	//drawHammerHilt();
+
+	glDisable(GL_TEXTURE_2D);
 
 
 	
@@ -2746,7 +2902,7 @@ void display()
 	//--------------------------------
 	//	End of OpenGL drawing
 	//--------------------------------
->>>>>>> parent of e7121b9... Revert "update"
+
 }
 //--------------------------------------------------------------------
 

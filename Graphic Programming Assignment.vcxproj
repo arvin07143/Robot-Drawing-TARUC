@@ -27,6 +27,19 @@
   <ItemGroup>
     <Image Include="..\..\..\Downloads\Daylight Box UV.bmp" />
     <Image Include="..\..\..\Downloads\text.bmp" />
+    <Image Include="blood_red.bmp" />
+    <Image Include="ice.bmp" />
+    <Image Include="iron1.bmp" />
+    <Image Include="iron_texture.bmp" />
+    <Image Include="left_mouth.bmp" />
+    <Image Include="light_red.bmp" />
+    <Image Include="right_mouth.bmp" />
+    <Image Include="robot_left_eye.bmp" />
+    <Image Include="robot_right_eye.bmp" />
+    <Image Include="silver_metallic.bmp" />
+    <Image Include="snow_white.bmp" />
+    <Image Include="white_texture.bmp" />
+    <Image Include="wood.bmp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

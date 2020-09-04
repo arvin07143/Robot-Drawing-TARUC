@@ -26,5 +26,44 @@
     <Image Include="..\..\..\Downloads\text.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="blood_red.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ice.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="iron_texture.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="iron1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="left_mouth.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="light_red.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="right_mouth.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="robot_left_eye.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="robot_right_eye.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="silver_metallic.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snow_white.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="white_texture.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="wood.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
