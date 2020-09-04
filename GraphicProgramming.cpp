@@ -28,11 +28,13 @@ double moveCount = 0;
 double neckRotateAngle = 0;
 
 
+
 double rightLegX = 0, rightLegY = 0, rightLegZ = 0;
 double leftLegX = 0, leftLegY = 0, leftLegZ = 0;
 BITMAP BMP;
 HBITMAP hBMP = NULL;
 using namespace std;
+
 
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -211,7 +213,6 @@ bool initPixelFormat(HDC hdc)
 //--------------------------------------------------------------------
 
 
-
 GLuint loadTexture(LPCSTR fileName) {
 	GLuint texture = 0;
 
@@ -233,7 +234,6 @@ GLuint loadTexture(LPCSTR fileName) {
 }
 
 void drawSphere(float radius, float r, float g, float b, int type) {
-
 	GLUquadricObj* sphere = gluNewQuadric();
 	gluQuadricDrawStyle(sphere, type);
 	glColor3f(r, g, b);
@@ -241,16 +241,6 @@ void drawSphere(float radius, float r, float g, float b, int type) {
 	gluDeleteQuadric(sphere);
 }
 
-void drawCylinder(float btm, float top, float height, int type, GLuint text) {
-
-	GLUquadricObj* cylinder = gluNewQuadric();
-	gluQuadricDrawStyle(cylinder, type);
-	glBindTexture(GL_TEXTURE, text);
-	gluQuadricTexture(cylinder, GL_TRUE);
-	gluQuadricNormals(cylinder, GLU_SMOOTH);
-	gluCylinder(cylinder, btm, top, height, 30, 30);
-	gluDeleteQuadric(cylinder);
-}
 
 void drawSphere(float radius, float r, float g, float b, int type , GLuint text) {
 	GLUquadricObj* sphere = gluNewQuadric();
@@ -1657,8 +1647,6 @@ void drawHammerHilt() {
 }
 
 
-	
-
 void drawDisk(float inner, float outer, float r, float g, float b, int type ,GLuint text) {
 
 	GLUquadricObj* disk = gluNewQuadric();
@@ -2902,7 +2890,6 @@ void display()
 	//--------------------------------
 	//	End of OpenGL drawing
 	//--------------------------------
-
 }
 //--------------------------------------------------------------------
 
