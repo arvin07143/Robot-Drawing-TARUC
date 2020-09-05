@@ -16,23 +16,32 @@ double widenFing = 0;
 double elbowAngle = 0;
 double rightArmAngle = 0;
 double leftArmAngle = 0;
-
-
-double kneeAngle = 0;
+double leftKneeAngle = 0;
+double rightKneeAngle = 0;
 double leftMoveForwardAngle = 0;
 double rightMoveForwardAngle = 0;
 double translateX = 0, translateY = 0, translateZ = 0;
 double rightArmRotationX = 0, rightArmRotationY = 0, rightArmRotationZ = 0;
 double leftArmRotationX = 0, leftArmRotationY = 0, leftArmRotationZ = 0;
-double moveCount = 0;
 double neckRotateAngle = 0;
-
-
+double leftArmElbowAngle = 0, rightArmElbowAngle = 0;
+double elbowAngleX = 0, elbowAngleY = 0, elbowAngleZ = 0;
+double rightWristAngle = 0, leftWristAngle = 0;
+double footAngle = 0;
+double reverseMoveCount = 0;
+double moveCount = 0;
 
 double rightLegX = 0, rightLegY = 0, rightLegZ = 0;
 double leftLegX = 0, leftLegY = 0, leftLegZ = 0;
 BITMAP BMP;
 HBITMAP hBMP = NULL;
+boolean weaponMode = false;
+boolean swordMode = false;
+boolean hammerMode = false;
+boolean attackMode = false;
+boolean downSwing = false;
+int speed = 0;
+float legSpeed = 0;
 using namespace std;
 
 
@@ -47,13 +56,13 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 	case WM_KEYDOWN:
 		switch (wParam) {
-		case VK_UP:
+		case VK_UP:// move finger inwards
 			if (leftFingerAngle <= 100)
 				leftFingerAngle += 3;
 			if (rightFingerAngle >= -100)
 				rightFingerAngle -= 3;
 			break;
-		case VK_DOWN:
+		case VK_DOWN:// move finger outwards
 			if (leftFingerAngle >= 1)
 				leftFingerAngle -= 3;
 			if (rightFingerAngle <= -1)
@@ -66,109 +75,207 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			neckRotateAngle += 1;
 			break;
 
-		case 'U':
+		case 'U':// right Arm move up
+		
 			rightArmRotationX = 1;
 			rightArmRotationZ = 0;
 			rightArmRotationY = 0;
-			if (rightArmAngle >= - 180)
-				rightArmAngle -= 3;
+			if (rightArmAngle >= -180) 
+			rightArmAngle -= 3;
 			break;
-		case 'L':
+		case 'L':// right Arm move down
 			rightArmRotationX = 1;
 			rightArmRotationZ = 0;
 			rightArmRotationY = 0;
 			if (rightArmAngle <= -1)
 				rightArmAngle += 3;
 			break;
-		case 'Y':
+		case 'T'://left Arm move up
 			leftArmRotationX = 1;
 			leftArmRotationZ = 0;
 			leftArmRotationY = 0;
 			if (leftArmAngle >= -180)
 				leftArmAngle -= 3;
 			break;
-		case 'T':
+		case 'Y'://left arm move down
 			leftArmRotationX = 1;
 			leftArmRotationZ = 0;
 			leftArmRotationY = 0;
 			if (leftArmAngle <= -1)
 				leftArmAngle += 3;
 			break;
-		case 'I':
-			rightArmRotationZ = 1;
-			if (rightArmAngle >= -90) {
-				rightArmAngle -= 3;
-			}
+		case 'F': //move right elbow up 
+			elbowAngleX = 1;
+			if(rightArmElbowAngle <= 40)
+			rightArmElbowAngle += 3;
 			break;
-		case 'F':
-			rightArmRotationZ = 1;
-			if (rightArmAngle <= 0)
-				rightArmAngle += 3;
+		case 'G'://move right elbow down
+			elbowAngleX = 1;
+			if (rightArmElbowAngle > 0)
+				rightArmElbowAngle -= 3;
 			break;
-		case 'G':
-			leftArmRotationZ = 1;
-			if (leftArmAngle <= 90)
-				leftArmAngle += 3;
+		case 'H'://move left elbow up
+			elbowAngleX = 1;
+			if (leftArmElbowAngle >= -40)
+				leftArmElbowAngle -= 3;
 			break;
-		case 'H':
-			leftArmRotationZ = 1;
-			if (leftArmAngle >= 1)
-				leftArmAngle -= 3;
+		case 'J'://move left elbow down
+			elbowAngleX = 1;
+			if (leftArmElbowAngle <= -1)
+				leftArmElbowAngle += 3;
 			break;
-		case 'J':
-
-		/*case 'W':
+		case 'K':// move foot up
+			if(footAngle > -10)
+			footAngle -= 3;
+			break;
+		case 'Z'://move foot down
+			if (footAngle < 0)
+				footAngle += 3;
+			break;
+		case 'X':// sword mode on
+			 weaponMode = true;
+			 swordMode = true;
+			 hammerMode = false;
+			 rightFingerAngle = -90;
+			 break;
+		case 'C'://hammer mode on
+			weaponMode = true;
+			hammerMode = true;
+			swordMode = false;
+			rightFingerAngle = -90;
+			break;
+		case 'V'://weapon mode off
+			weaponMode = false;
+			swordMode = false;
+			hammerMode = false;
+			rightFingerAngle = 0;
+			break;
+		case 'W':
 			moveCount++;
-
-			if (moveCount > 0 && moveCount <= 25) {
+			rightArmRotationX = 1;
+			leftArmRotationX = 1;
+			if (moveCount < 20 && moveCount >= 0) {
 				leftMoveForwardAngle--;
 				leftLegY += 0.03;
-				if (rightMoveForwardAngle < 0) {
-					rightMoveForwardAngle++;
-					rightLegY -= 0.03;
-				}
-				translateZ -= 0.05;
-			}	
-
-			if (moveCount > 26 && moveCount <= 51) {
+				leftKneeAngle += 0.9;
+				rightArmAngle-=2;
+			}
+			if (moveCount >= 20 && moveCount < 39) {
 				leftMoveForwardAngle++;
-				leftLegY -= 0.03;
+				if (leftLegY > 0) {
+					leftLegY -= 0.03;
+					leftKneeAngle -= 0.9;
+					rightArmAngle+=2;
+					translateZ -= 0.02;
+				}
+			}
+
+			if (moveCount >= 40 && moveCount < 60) {
 				rightMoveForwardAngle--;
 				rightLegY += 0.03;
-				translateZ = -0.05;
+				rightKneeAngle += 0.9;
+				leftArmAngle-=2;
+			}
+			if (moveCount >= 60 && moveCount < 80) {
+				rightMoveForwardAngle++;
+				if (rightLegY > 0) {
+					rightLegY -= 0.03;
+					rightKneeAngle -= 0.9;
+					leftArmAngle+=2;
+					translateZ -= 0.02;
+				}
 			}
 
-			if (moveCount == 52) {
+			if (moveCount == 79)
 				moveCount = 0;
-			}
 			break;
 		case 'S':
-			moveCount++;
-
-			if (moveCount > 0 && moveCount <= 25) {
+			reverseMoveCount++;
+			rightArmRotationX = 1;
+			leftArmRotationX = 1;
+			if (reverseMoveCount < 20 && reverseMoveCount >= 0) {
 				leftMoveForwardAngle++;
-				leftLegY += 0.03;
-				if (rightMoveForwardAngle > 0) {
-					rightMoveForwardAngle--;
-					rightLegY -= 0.03;
-				}
-				translateZ += 0.05;
-			}
-
-			if (moveCount > 26 && moveCount <= 51) {
-				leftMoveForwardAngle--;
 				leftLegY -= 0.03;
-				rightMoveForwardAngle++;
-				rightLegY += 0.03;
-				translateZ += 0.05;
+				leftKneeAngle += 0.9;
+				rightArmAngle -= 2;
+			}
+			if (reverseMoveCount >= 20 && reverseMoveCount < 39) {
+				leftMoveForwardAngle--;
+				if (leftLegY < 1) {
+					leftLegY += 0.03;
+					leftKneeAngle -= 0.9;
+					rightArmAngle += 2;
+					translateZ += 0.02;
+				}
 			}
 
-			if (moveCount == 52) {
-				moveCount = 0;
-			}*/
+			if (reverseMoveCount >= 40 && reverseMoveCount < 60) {
+				rightMoveForwardAngle++;
+				rightLegY -= 0.03;
+				rightKneeAngle += 0.9;
+				leftArmAngle -= 2;
+			}
+			if (reverseMoveCount >= 60 && reverseMoveCount < 80) {
+				rightMoveForwardAngle--;
+				if (rightLegY < 1) {
+					rightLegY += 0.03;
+					rightKneeAngle -= 0.9;
+					leftArmAngle += 2;
+					translateZ += 0.02;
+				}
+			}
+
+			if (reverseMoveCount == 79)
+				reverseMoveCount = 0;
 
 			break;
+
+		case VK_SPACE:
+			leftFingerAngle = 0, rightFingerAngle = 0;;
+			 widenFing = 0;
+			 elbowAngle = 0;
+			 rightArmAngle = 0;
+			 leftArmAngle = 0;
+			 leftKneeAngle = 0;
+			 rightKneeAngle = 0;
+			 leftMoveForwardAngle = 0;
+			 rightMoveForwardAngle = 0;
+			 translateX = 0, translateY = 0, translateZ = 0;
+			 rightArmRotationX = 0, rightArmRotationY = 0, rightArmRotationZ = 0;
+			 leftArmRotationX = 0, leftArmRotationY = 0, leftArmRotationZ = 0;
+			 neckRotateAngle = 0;
+			 leftArmElbowAngle = 0, rightArmElbowAngle = 0;
+			 elbowAngleX = 0, elbowAngleY = 0, elbowAngleZ = 0;
+			 rightWristAngle = 0, leftWristAngle = 0;
+			 footAngle = 0;
+			 reverseMoveCount = 0;
+			 moveCount = 0;
+			 rightLegX = 0;
+			 rightLegY = 0;
+			 rightLegZ = 0;
+			 leftLegX = 0;
+			 leftLegY = 0;
+			 leftLegZ = 0;
+			 speed = 0;
+			 legSpeed = 0;
+			 weaponMode = false;
+			 swordMode = false;
+			 hammerMode = false;
+			 attackMode = false;
+			 downSwing = false;
+			break;
+
+		case 'B':
+			if (weaponMode == true) {
+				attackMode = true;
+				downSwing = false;
+				rightArmAngle = 0;
+				speed = -4;
+				legSpeed = 1;
+			}
+			break;
 		}
+		
 
 	default:
 		break;
@@ -263,7 +370,16 @@ void drawCylinder(float btm, float top, float height, float r, float g, float b,
 
 	gluDeleteQuadric(cylinder);
 }
+void drawCylinder(float btm, float top, float height, int type, GLuint text) {
 
+	GLUquadricObj* cylinder = gluNewQuadric();
+	gluQuadricDrawStyle(cylinder, type);
+	glBindTexture(GL_TEXTURE, text);
+	gluQuadricTexture(cylinder, GL_TRUE);
+	gluQuadricNormals(cylinder, GLU_SMOOTH);
+	gluCylinder(cylinder, btm, top, height, 30, 30);
+	gluDeleteQuadric(cylinder);
+}
 
 void drawCylinder(float btm, float top, float height, float r, float g, float b, int type, GLuint text) {
 
@@ -813,20 +929,20 @@ void drawHilt() {
 	glPushMatrix();
 	glTranslatef(0.0, 0.38, 0);
 	glRotatef(-90, 1, 0, 0);
-	drawCylinder(0.015, 0.02, 0.02, GLU_FILL, texture5);//hilt
+	drawCylinder(0.025, 0.03, 0.02, GLU_FILL, texture5);//hilt
 	glPopMatrix();
 
 
 	glPushMatrix();
 	glTranslatef(0.0, 0.73, 0);
 	glRotatef(-90, 1, 0, 0);
-	drawCylinder(0.02, 0.02, 0.04, GLU_FILL, texture5);//hilt
+	drawCylinder(0.03, 0.03, 0.04, GLU_FILL, texture5);//hilt
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0.0, 0.35, 0.0);
 	glRotatef(-90, 1, 0, 0);
-	drawCylinder(0.015, 0.015, 0.06, GLU_FILL, texture5);
+	drawCylinder(0.025, 0.025, 0.06, GLU_FILL, texture5);
 	glPopMatrix();
 	glDeleteTextures(1, &texture5);
 
@@ -834,7 +950,7 @@ void drawHilt() {
 	glPushMatrix();
 	glTranslatef(0.0, 0.4, 0);
 	glRotatef(-90, 1, 0, 0);
-	drawCylinder(0.02, 0.02, 0.33, GLU_FILL, texture4);//hilt
+	drawCylinder(0.03, 0.03, 0.33, GLU_FILL, texture4);//hilt
 	glPopMatrix();
 
 	glDeleteTextures(1, &texture4);
@@ -1552,7 +1668,7 @@ void drawHammerHilt() {
 	glColor3f(1, 1, 1);
 	GLuint texture8 = loadTexture("wood.bmp");
 	glPushMatrix();
-	glTranslatef(0, 0.05, 0.07);
+	glTranslatef(0.55, -0.6, 0.07);
 	//Face 1: behind
 	glBegin(GL_POLYGON);
 	glTexCoord2f(0.0f, 0.0f);
@@ -2231,7 +2347,7 @@ void drawFoot() {
 
 }
 
-void drawLeg() {
+void drawLeg(float kneeAngle) {
 	glPushMatrix();
 	glScalef(0.5, 0.5, 0.5);
 
@@ -2241,12 +2357,18 @@ void drawLeg() {
 	glRotatef(kneeAngle, 1, 0, 0);
 	glTranslatef(0, -15, 15);
 	glPushMatrix();
+	glTranslatef(0, -3, -31);
+	glRotatef(footAngle, 1, 0, 0);
+	glTranslatef(0, 3, 31);
+	glPushMatrix();
 	glTranslatef(0, -20, 0);
 	glRotatef(180, 0, 1, 0);
 	drawFoot();
 	glPopMatrix();
 
 	drawAnkle();
+	glPopMatrix();
+
 
 	GLuint texture4 = loadTexture("metal.bmp");
 	glPushMatrix();
@@ -2277,11 +2399,11 @@ void drawLeg() {
 	glPopMatrix();
 }
 
-void drawArm(float fingerAngle) {
+void drawArm(float fingerAngle, float elbowAngle) {
 	glPushMatrix();
-	glTranslatef(0,-7, 0);
-	glRotatef(elbowAngle, 1, 0, 0);
-	glTranslatef(0, 7, 0);
+	glTranslatef(3.5,-6.5, 0);
+	glRotatef(elbowAngle, elbowAngleX, elbowAngleY, elbowAngleZ);
+	glTranslatef(-3.5, 6.5, 0);
 	glPushMatrix();
 	glTranslatef(0, 27, 0);
 	glPushMatrix();
@@ -2337,7 +2459,6 @@ void drawArm(float fingerAngle) {
 	glTexCoord2f(1, 1);
 	glVertex3f(1, 1, -1);
 	glEnd();
-
 	glDeleteTextures(1, &wrist);
 
 
@@ -2771,7 +2892,7 @@ void leftLeg() {
 	glTranslatef(leftLegX, leftLegY, leftLegZ);
 	glRotatef(leftMoveForwardAngle, 1, 0, 0);
 	glTranslatef(-4, -20, 7);
-	drawLeg();
+	drawLeg(leftKneeAngle);
 	glPopMatrix();
 }
 
@@ -2780,7 +2901,7 @@ void rightLeg() {
 	glTranslatef(rightLegX, rightLegY, rightLegZ);
 	glRotatef(rightMoveForwardAngle, 1, 0, 0);
 	glTranslatef(-16, -20, 7);
-	drawLeg();
+	drawLeg(rightKneeAngle);
 	glPopMatrix();
 }
 
@@ -2794,7 +2915,38 @@ void drawRightArm() {
 	glRotatef(90, 0, 1, 0);
 	glRotatef(180, 1, 0, 0);
 	glScalef(1, 0.5, 0.8);
-	drawArm(rightFingerAngle);
+	drawArm(rightFingerAngle,rightArmElbowAngle);
+	if (weaponMode == true) {
+		if (swordMode == true) {
+			glPushMatrix();
+			glTranslatef(-30, 30, -5);
+			glRotatef(180, 0, 0, 1);
+			glRotatef(90, 0, 0, 1);
+			glScalef(60, 60, 60);
+			drawHilt();
+			drawSword();
+			glPopMatrix();
+		}
+	}
+
+	if (weaponMode == true) {
+		if (hammerMode == true) {
+			glPushMatrix();
+			glTranslatef(0, 28, -15);
+			glRotatef(90, 0, 0, 1);
+			glScalef(60, 60, 60);
+			glPushMatrix();
+			glScalef(1.7, 0.5, 1.5);
+			drawHammer();
+			glPopMatrix();
+			glPushMatrix();
+			glTranslatef(0.55,- 0.65, 0.06);
+			glRotatef(180, 0, 0, 1);
+			drawHammerHilt();
+			glPopMatrix();
+			glPopMatrix();
+		}
+	}
 	glPopMatrix();
 
 	GLuint polish = loadTexture("blackpolish.bmp");
@@ -2817,7 +2969,7 @@ void drawLeftArm() {
 	glRotatef(90, 0, 1, 0);
 	glRotatef(180, 1, 0, 0);
 	glScalef(1, 0.5, 0.8);
-	drawArm(leftFingerAngle);
+	drawArm(leftFingerAngle,leftArmElbowAngle);
 	glPopMatrix();
 
 	GLuint polish1 = loadTexture("blackpolish.bmp");
@@ -2866,32 +3018,34 @@ void display()
 
 	rightLeg();
 
-	
+
 	leftLeg();
 	
-
 	glPopMatrix();
 	glPopMatrix();
 
-	//glRotatef(0.010, 1, 1, 0);
-	//glPushMatrix();
-	//glScalef(50, 50, 50);
-	//drawHilt();
-	//drawSword();
-	//glPopMatrix();
-	//drawHammer();
-	//drawHammerHilt();
+	if (attackMode == true) {
+		rightArmRotationX = 1;
+		elbowAngleZ = 1;
+		if (rightArmAngle >= -152 && rightArmAngle <= 0) {
+			rightArmAngle += speed;
+		}
+		if (rightArmAngle == -152 && rightArmAngle != 0) {
+			speed = -(speed);
+			rightArmAngle += speed;
+			attackMode = false;
+		}
+
+	}
+
+	
+	
 
 	glDisable(GL_TEXTURE_2D);
 
 
-	
-	//
-	//--------------------------------
-	//	End of OpenGL drawing
-	//--------------------------------
 }
-//--------------------------------------------------------------------
+
 
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
