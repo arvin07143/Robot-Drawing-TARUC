@@ -4017,7 +4017,7 @@ void display()
 	glEnable(GL_COLOR_MATERIAL);
 	isAmbient ? glEnable(GL_LIGHT0) : glDisable(GL_LIGHT0);
 
-	isDiffuse ? glEnable(GL_LIGHT1) : glEnable(GL_LIGHT1);
+	isDiffuse ? glEnable(GL_LIGHT1) : glDisable(GL_LIGHT1);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
