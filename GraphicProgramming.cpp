@@ -106,12 +106,13 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			break;
 		case 'F': //move right elbow up 
 			elbowAngleX = 1;
-			if(rightArmElbowAngle <= 40)
-			rightArmElbowAngle += 3;
+			rightArmRotationY = 1;
+			if (rightArmElbowAngle <= 40) 
+				rightArmElbowAngle += 3;
 			break;
 		case 'G'://move right elbow down
 			elbowAngleX = 1;
-			if (rightArmElbowAngle > 0)
+			if (rightArmElbowAngle > 0) 
 				rightArmElbowAngle -= 3;
 			break;
 		case 'H'://move left elbow up
