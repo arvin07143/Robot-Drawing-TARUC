@@ -38,6 +38,7 @@ double footAngle = 0;
 double reverseMoveCount = 0;
 double moveCount = 0;
 double cameraRotate = 0;
+double robotRotateY = 0;
 
 double rightLegX = 0, rightLegY = 0, rightLegZ = 0;
 double leftLegX = 0, leftLegY = 0, leftLegZ = 0;
@@ -298,7 +299,33 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case 'M':
 			isAmbient = isAmbient ? false : true;
 			break;
-
+		case 'N':
+			isDiffuse = isDiffuse ? false : true;
+			break;
+		case VK_OEM_PERIOD:
+			robotRotateY += 10;
+			break;
+		case VK_OEM_COMMA:
+			robotRotateY -= 10;
+			break;
+		case VK_NUMPAD8:
+			translateY += 10;
+			break;
+		case VK_NUMPAD2:
+			translateY -= 10;
+			break;
+		case VK_NUMPAD4:
+			translateX -= 10;
+			break;
+		case VK_NUMPAD6:
+			translateX += 10;
+			break;
+		case VK_NUMPAD7:
+			translateZ += 10;
+			break;
+		case VK_NUMPAD9:
+			if(translateZ > -170)translateZ -= 10;
+			break;
 		default:
 			break;
 		}
@@ -3990,7 +4017,7 @@ void display()
 	glEnable(GL_COLOR_MATERIAL);
 	isAmbient ? glEnable(GL_LIGHT0) : glDisable(GL_LIGHT0);
 
-	glEnable(GL_LIGHT1);
+	isDiffuse ? glEnable(GL_LIGHT1) : glEnable(GL_LIGHT1);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
@@ -4006,7 +4033,7 @@ void display()
 	if (!isOrtho) {
 		glTranslatef(0, 0, -80);
 	}
-	glRotatef(180, 0, 1, 0);
+	glRotatef(robotRotateY, 0, 1, 0);
 	drawRobot();
 	glPopMatrix();
 	glPopMatrix();
