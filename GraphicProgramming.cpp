@@ -166,7 +166,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					leftLegY -= 0.03;
 					leftKneeAngle -= 0.9;
 					rightArmAngle += 2;
-					translateZ -= 0.02;
+					translateZ -= 0.1;
 				}
 			}
 
@@ -182,7 +182,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					rightLegY -= 0.03;
 					rightKneeAngle -= 0.9;
 					leftArmAngle += 2;
-					translateZ -= 0.02;
+					translateZ -= 0.1;
 				}
 			}
 
@@ -205,7 +205,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					leftLegY += 0.03;
 					leftKneeAngle -= 0.9;
 					rightArmAngle += 2;
-					translateZ += 0.02;
+					translateZ += 0.1;
 				}
 			}
 
@@ -221,7 +221,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					rightLegY += 0.03;
 					rightKneeAngle -= 0.9;
 					leftArmAngle += 2;
-					translateZ += 0.02;
+					translateZ += 0.1;
 				}
 			}
 
