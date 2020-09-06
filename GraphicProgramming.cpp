@@ -1077,7 +1077,7 @@ void drawHilt() {
 	glPushMatrix();
 	glTranslatef(0, 0.33, -0.014);
 	glTexCoord2f(0.0f, 1.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	//Face 1 : Behind
 	glVertex3f(-0.05, -0.05, 0.02);
 	glVertex3f(-0.05, 0.05, 0.02);
@@ -1087,7 +1087,7 @@ void drawHilt() {
 
 	//Face 2 : right
 	glTexCoord2f(1.0f, 1.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glVertex3f(0.05, -0.05, 0.02);
 	glVertex3f(0.05, -0.05, 0.01);
 	glVertex3f(0.05, 0.05, 0.01);
@@ -1096,7 +1096,7 @@ void drawHilt() {
 
 	//Face 3 : Top
 	glTexCoord2f(0.0f, 0.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glVertex3f(0.05, 0.05, 0.02);
 	glVertex3f(0.05, 0.05, 0.01);
 	glVertex3f(-0.05, 0.05, 0.01);
@@ -1105,7 +1105,7 @@ void drawHilt() {
 
 	//Face 4 : Left
 	glTexCoord2f(1.0f, 0.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glVertex3f(-0.05, 0.05, 0.02);
 	glVertex3f(-0.05, -0.05, 0.02);
 	glVertex3f(-0.05, -0.05, 0.01);
@@ -1114,7 +1114,7 @@ void drawHilt() {
 
 	//Face 5 : Front
 	glTexCoord2f(0.5f, 1.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glVertex3f(-0.05, 0.05, 0.01);
 	glVertex3f(-0.05, -0.05, 0.01);
 	glVertex3f(0.05, -0.05, 0.01);
@@ -1123,7 +1123,7 @@ void drawHilt() {
 
 	//Face 6 : Bottom
 	glTexCoord2f(1.0f, 0.5f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glVertex3f(0.05, -0.05, 0.01);
 	glVertex3f(0.05, -0.05, 0.02);
 	glVertex3f(-0.05, -0.05, 0.02);
@@ -1788,7 +1788,7 @@ void drawHammerHilt() {
 	glPushMatrix();
 	glTranslatef(0.55, -0.6, 0.07);
 	//Face 1: behind
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-0.04, -0.4, 0.05);
 
@@ -1803,7 +1803,7 @@ void drawHammerHilt() {
 	glEnd();
 
 	//Face 2 : right
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0.04, -0.4, 0.05);
 
@@ -1818,7 +1818,7 @@ void drawHammerHilt() {
 	glEnd();
 
 	//Face 3 : Top
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0.04, 0.3, 0.05);
 
@@ -1833,7 +1833,7 @@ void drawHammerHilt() {
 	glEnd();
 
 	//Face 4 : Left
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-0.04, 0.3, 0.05);
 
@@ -1848,7 +1848,7 @@ void drawHammerHilt() {
 	glEnd();
 
 	//Face 5 : Front
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-0.04, 0.3, 0.0);
 
@@ -1863,7 +1863,7 @@ void drawHammerHilt() {
 	glEnd();
 
 	//Face 6 : Bottom
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0.04, -0.4, 0.0);
 
@@ -3141,8 +3141,8 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1, 0, 1, 1);
 	glMatrixMode(GL_MODELVIEW);
-	glRotatef(1, 0, 1, 0);
-
+	glPushMatrix();
+	glRotatef(180, 0, 1, 0);
 	glPushMatrix();
 	glTranslatef(translateX, translateY, translateZ);
 
@@ -3170,6 +3170,7 @@ void display()
 
 	leftLeg();
 
+	glPopMatrix();
 	glPopMatrix();
 	glPopMatrix();
 
